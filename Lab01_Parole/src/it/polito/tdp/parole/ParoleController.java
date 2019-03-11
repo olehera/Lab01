@@ -18,7 +18,9 @@ import javafx.scene.control.TextField;
 
 public class ParoleController {
 	
-	Parole elenco ;
+	Parole elenco;
+	double ti;
+	double tf;
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -33,19 +35,73 @@ public class ParoleController {
     private TextArea txtResult; // Value injected by FXMLLoader
     
     @FXML
+    private TextArea txtTime;
+    
+    @FXML
     private Button btnReset;
+    
+    @FXML
+    private Button btnCanc;
 
     @FXML // fx:id="btnInserisci"
     private Button btnInserisci; // Value injected by FXMLLoader
 
     @FXML
     void doInsert(ActionEvent event) {
-    	// TODO
+    	
+    	ti = System.nanoTime();
+    	
+    	String temp = txtParola.getText().trim();
+    	
+    	if (temp.length()!=0)
+    		elenco.addParola(temp);
+    	
+    	txtParola.clear();
+    	txtResult.clear();
+    	txtTime.clear();
+    	
+    	for (String st : elenco.getElenco())
+    		txtResult.appendText(st+"\n");
+    	
+    	tf = System.nanoTime();
+    	txtTime.appendText("Tempo di esecuzione: "+String.valueOf((tf-ti)*1000000000)+" secondi");
+    	
     }
     
     @FXML
     void doReset(ActionEvent event) {
-    	// TODO
+    	
+    	ti = System.nanoTime();
+    	
+    	txtParola.clear();
+    	txtResult.clear();
+    	txtTime.clear();
+    	elenco.reset();
+    	
+    	tf = System.nanoTime();
+    	txtTime.appendText("Tempo di esecuzione: "+String.valueOf((tf-ti)*1000000000)+" secondi");
+    }
+    
+    @FXML
+    void doCanc(ActionEvent event) {
+
+    	ti = System.nanoTime();
+    	
+        String temp = txtResult.getSelectedText().trim();
+    	
+    	if (temp.length()!=0)
+    		elenco.remParola(temp);
+    	
+    	txtParola.clear();
+    	txtResult.clear();
+    	txtTime.clear();
+    	
+    	for (String st : elenco.getElenco())
+    		txtResult.appendText(st+"\n");
+    	
+    	tf = System.nanoTime();
+    	txtTime.appendText("Tempo di esecuzione: "+String.valueOf((tf-ti)*1000000000)+" secondi");
+
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
